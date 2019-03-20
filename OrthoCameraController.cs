@@ -1,10 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Persistence;
 
 public class OrthoCameraController : MonoBehaviour
 {
     Camera cam;
+    public Camera Cam
+    {
+        get
+        {
+            return cam;
+        }
+    }
+
     [SerializeField]
     float minSize = 0.01f;
     [SerializeField]
@@ -18,7 +27,6 @@ public class OrthoCameraController : MonoBehaviour
         }
     }
     private Vector3 preMousePosition;
-    [Header("orthoSizeが1を基準とする")]
     public float moveSpeed = 1f;
     public float zoomSpeed = 1f;
     
@@ -29,6 +37,9 @@ public class OrthoCameraController : MonoBehaviour
 
     public bool IsEnableControl = true;
 
+    [SerializeField]
+    string settingFileName;
+
     private void Awake()
     {
         defaultPosition = this.transform.localPosition;
@@ -37,10 +48,10 @@ public class OrthoCameraController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        Restore();
     }
 
-    public void Reset()
+    public void Clear()
     {
         this.cam.orthographicSize = defaultSize;
         this.transform.localPosition = defaultPosition;
@@ -52,7 +63,7 @@ public class OrthoCameraController : MonoBehaviour
         if (!IsEnableControl) return;
         if (Input.GetKeyDown(resetKey))
         {
-            Reset();
+            Clear();
         }
         if (Input.GetKey(keyCode))
         {
@@ -75,10 +86,34 @@ public class OrthoCameraController : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             var pos = this.transform.position;
-            var move = Input.mousePosition - preMousePosition;
-            move.z = 0f;
-            move *= -1f;
-            this.transform.localPosition += move * moveSpeed * Time.deltaTime;
+            var mouseMove = Input.mousePosition - preMousePosition;
+            mouseMove.z = 0f;
+            mouseMove *= -1f;
+            var positionMove = this.transform.right * mouseMove.x + this.transform.up * mouseMove.y;
+            this.transform.localPosition += positionMove * moveSpeed * Time.deltaTime*(cam.orthographicSize/defaultSize);
         }
     }
+
+    public void  Restore()
+    {
+        var info = IOHandler.LoadJson<OrthograhicCameraInfo>(IOHandler.IntoStreamingAssets(settingFileName));
+        if (info == null) return;
+        this.transform.position = info.transformInfo.Position.ToVector3();
+        this.transform.eulerAngles = info.transformInfo.EulerAngles.ToVector3();
+        this.cam.orthographicSize = info.OrthograhicSize;
+    }
+
+    public void Save()
+    {
+        var info = new OrthograhicCameraInfo();
+        info.OrthograhicSize = cam.orthographicSize;
+        info.transformInfo = new TransformInfo(this.transform);
+        IOHandler.SaveJson(IOHandler.IntoStreamingAssets(settingFileName), info);
+    }
+}
+
+public class OrthograhicCameraInfo
+{
+    public TransformInfo transformInfo;
+    public float OrthograhicSize;
 }

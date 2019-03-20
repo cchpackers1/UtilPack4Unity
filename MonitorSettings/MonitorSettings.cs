@@ -3,5 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MonitorSettings {
+    public bool IsEnable;
     public int TargetMonitor;
 }

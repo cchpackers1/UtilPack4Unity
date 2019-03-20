@@ -3,29 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(RawImage))]
 public class PickupMonitorViewUGUI : MonoBehaviour {
     [SerializeField]
-    MultiMonitorManager monitorManager;
+    CanvasScaler canvasScaler;
+
     [SerializeField]
+    MultiMonitorManager monitorManager;
     RawImage rawImage;
 
     private void Awake()
     {
-        monitorManager.ClickEvent += MonitorManager_ClickEvent;
+        rawImage = GetComponent<RawImage>();
+        monitorManager.SelectedEvent += MonitorManager_SelectedEvent;
     }
 
-    private void MonitorManager_ClickEvent(MonitorView monitorView)
+    private void MonitorManager_SelectedEvent(MonitorView monitorView)
     {
-        rawImage.texture = monitorView.Texture;
-    }
+        var texture = monitorView.Texture;
+        rawImage.texture = texture;
+        rawImage.rectTransform.sizeDelta = EMath.GetShrinkFitSize(new Vector2(texture.width, texture.height), canvasScaler.referenceResolution);
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
 }

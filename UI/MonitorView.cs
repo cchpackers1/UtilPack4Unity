@@ -17,6 +17,7 @@ public class MonitorView : MonoBehaviour
 
     [SerializeField]
     RawImage rawImage;
+
     [SerializeField]
     Text label;
     public string LabelText
@@ -55,6 +56,7 @@ public class MonitorView : MonoBehaviour
 
     public void OnClicked()
     {
+        print("clicked");
         if (ClickEvent != null) ClickEvent(this);
     }
 }

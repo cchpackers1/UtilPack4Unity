@@ -33,6 +33,15 @@ namespace TypeUtils
         }
     }
 
+    class Format
+    {
+        public static string DateTime2String(DateTime dateTime)
+        {
+            return dateTime.Year.ToString("0000") + "_" + dateTime.Month.ToString("00") + "_" + dateTime.Day.ToString("00")
+                 + "_" + dateTime.Hour.ToString("00") + "_" + dateTime.Minute.ToString("00") + "_" + dateTime.Second.ToString("00")
+                  + "_" + dateTime.Millisecond.ToString("0000");
+        }
+    }
 
 
     namespace Json

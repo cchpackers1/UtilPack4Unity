@@ -32,12 +32,32 @@ public class MultiMonitorManager : MonoBehaviour
     [SerializeField]
     GameObject prefab;
 
-    public event MonitorView.OnClick ClickEvent;
+    public event MonitorView.OnClick SelectedEvent;
     public delegate void OnInitilized(TextureHolderBase textureHoderBase);
     public event OnInitilized InitializedEvent;
 
+    public List<MonitorView> MonitorViews
+    {
+        get;
+        private set;
+    }
+
+    public bool IsVisible
+    {
+        set
+        {
+            parentRectTransform.gameObject.SetActive(value);
+        }
+    }
+
+    public void SetVisible(bool isVisible)
+    {
+        IsVisible = isVisible;
+    }
+
     private void Start()
     {
+        MonitorViews = new List<MonitorView>();
         //print(parentRectTransform.sizeDelta);
         //print(contentRectTransform.sizeDelta);
         var contentsSize = Vector2.zero;
@@ -89,12 +109,13 @@ public class MultiMonitorManager : MonoBehaviour
         go.transform.SetParent(contentSizeFitter.transform, false);
         var component = go.GetComponent<MonitorView>();
         component.Init(textureHolderBase.gameObject.name, textureHolderBase, gridLayoutGroup.cellSize);
-        component.ClickEvent += Component_ClickEvent;
+        component.ClickEvent += OnSelected;
+        MonitorViews.Add(component);
     }
 
-    private void Component_ClickEvent(MonitorView cameraMonitorView)
+    public void OnSelected(MonitorView monitorView)
     {
-        if (ClickEvent != null) ClickEvent(cameraMonitorView);
+        SelectedEvent?.Invoke(monitorView);
     }
 
 }

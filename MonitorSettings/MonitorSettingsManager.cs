@@ -4,15 +4,16 @@ using UnityEngine;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using System;
 
 public class MonitorSettingsManager : MonoBehaviour
 {
-    [SerializeField]
-    AlertManager alertManager;
     MonitorSettings settings;
     [SerializeField]
     string fileName;
 
+    public event Action<string> OnError;
+    
     private void Awake()
     {
         var path = Path.Combine(Application.streamingAssetsPath, fileName);
@@ -20,10 +21,13 @@ public class MonitorSettingsManager : MonoBehaviour
         {
             var json = File.ReadAllText(path);
             settings = JsonConvert.DeserializeObject<MonitorSettings>(json);
+            if (!settings.IsEnable)
+            {
+                return;
+            }
             if (settings.TargetMonitor < 0 || settings.TargetMonitor >= Display.displays.Length)
             {
-                alertManager.Display("選択されたモニター番号が正しくありません。",
-                    new AlertButton.AlertButtonInfo("OK", () => { alertManager.Hide(); }));
+                OnError?.Invoke("選択されたモニター番号が正しくありません。");
                 return;
             }
 
@@ -35,9 +39,7 @@ public class MonitorSettingsManager : MonoBehaviour
         }
         else
         {
-            alertManager.Display("設定ファイルがありません。",
-                new AlertButton.AlertButtonInfo("OK", () => { alertManager.Hide(); })
-                );
+            OnError?.Invoke("設定ファイルがありません。");
             return;
         }
     }
