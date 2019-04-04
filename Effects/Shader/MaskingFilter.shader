@@ -1,6 +1,6 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Hidden/MaskingFilter"
+Shader "UtilPack4Unity/Filter/MaskingFilter"
 {
 	Properties
 	{
@@ -48,7 +48,7 @@ Shader "Hidden/MaskingFilter"
 				fixed4 mc = tex2D(_MaskTex, i.uv);
 				fixed4 col = fixed4(1,1,1,1);
 				float brightness = (mc.r + mc.g + mc.b) / 3;
-				if (brightness < 0.1) {
+				if (brightness < 0.01) {
 					col = _Color;
 				}
 				else {

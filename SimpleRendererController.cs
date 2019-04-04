@@ -2,38 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleRendererController : MonoBehaviour {
-    Renderer renderer;
-    public Renderer Renderer
+namespace UtilPack4Unity
+{
+    public class SimpleRendererController : MonoBehaviour
     {
-        get {
-            if (this.renderer == null)
+        Renderer renderer;
+        public Renderer Renderer
+        {
+            get
             {
-                renderer = GetComponent<Renderer>();
+                if (this.renderer == null)
+                {
+                    renderer = GetComponent<Renderer>();
+                }
+                return this.renderer;
             }
-            return this.renderer;
         }
-    }
 
-    public float Alpha
-    {
-        get {
-            return renderer.material.color.a;
+        public float Alpha
+        {
+            get
+            {
+                return renderer.material.color.a;
+            }
+            set
+            {
+                var color = Renderer.material.color;
+                color.a = value;
+                Renderer.material.color = color;
+            }
         }
-        set {
-            var color = Renderer.material.color;
-            color.a = value;
-            Renderer.material.color = color;
-        }
-    }
 
-    public Color Color
-    {
-        get {
-            return renderer.material.color;
-        }
-        set {
-            Renderer.material.color = value;
+        public Color Color
+        {
+            get
+            {
+                return renderer.material.color;
+            }
+            set
+            {
+                Renderer.material.color = value;
+            }
         }
     }
 }

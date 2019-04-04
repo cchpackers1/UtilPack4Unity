@@ -2,41 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneObjectController : MonoBehaviour
+namespace UtilPack4Unity
 {
-	[SerializeField]
-	protected int id;
-	public int Id{
-		get{
-			return id;
-		}
-	}
-
-    [SerializeField]
-    protected GameObject parent;
-
-    public virtual void Display()
+    public class SceneObjectController : MonoBehaviour
     {
-        parent.SetActive(false);
-    }
+        [SerializeField]
+        protected int id;
+        public int Id
+        {
+            get
+            {
+                return id;
+            }
+        }
 
-    public virtual void Hide()
-    {
-        parent.SetActive(true);
-    }
+        [SerializeField]
+        protected GameObject parent;
 
-    public virtual void Play()
-    {
+        public virtual void Display()
+        {
+            parent.SetActive(false);
+        }
 
-    }
+        public virtual void Hide()
+        {
+            parent.SetActive(true);
+        }
 
-    public virtual void Stop()
-    {
+        public virtual void Play()
+        {
 
-    }
+        }
 
-    public virtual void Pause()
-    {
+        public virtual void Stop()
+        {
 
+        }
+
+        public virtual void Pause()
+        {
+
+        }
     }
 }

@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
-public class CaptureDeviceTextureHolder : TextureHolderBase
+namespace UtilPack4Unity
 {
-    public event Action OnAvailable;
-
-    protected virtual void Available()
+    public class CaptureDeviceTextureHolder : TextureHolderBase
     {
-        OnAvailable?.Invoke();
+        public event Action OnAvailable;
+
+        protected virtual void Available()
+        {
+            OnAvailable?.Invoke();
+        }
     }
 }

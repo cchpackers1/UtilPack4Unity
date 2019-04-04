@@ -3,60 +3,65 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MonitorView : MonoBehaviour
+namespace UtilPack4Unity
 {
-    public delegate void OnClick(MonitorView monitorView);
-    public event OnClick ClickEvent;
-    public Texture Texture
+    public class MonitorView : MonoBehaviour
     {
-        get {
-            return textureHolder.GetTexture();
+        public delegate void OnClick(MonitorView monitorView);
+        public event OnClick ClickEvent;
+        public Texture Texture
+        {
+            get
+            {
+                return textureHolder.GetTexture();
+            }
         }
-    }
-    TextureHolderBase textureHolder;
+        TextureHolderBase textureHolder;
 
-    [SerializeField]
-    RawImage rawImage;
+        [SerializeField]
+        RawImage rawImage;
 
-    [SerializeField]
-    Text label;
-    public string LabelText
-    {
-        get {
-            return label.text;
+        [SerializeField]
+        Text label;
+        public string LabelText
+        {
+            get
+            {
+                return label.text;
+            }
         }
-    }
-    Vector2 size;
+        Vector2 size;
 
-    public int Id;
-    public void Init(string label, TextureHolderBase textureHolder, Vector2 size)
-    {
-        var rectTransform = GetComponent<RectTransform>();
-        this.label.text = label;
-        rawImage.texture = textureHolder.GetTexture();
-        this.textureHolder = textureHolder;
-        this.size = size;
-        textureHolder.ChangeTextureEvent += TextureOwner_ChangeTextureEvent;
+        public int Id;
+        public void Init(string label, TextureHolderBase textureHolder, Vector2 size)
+        {
+            var rectTransform = GetComponent<RectTransform>();
+            this.label.text = label;
+            rawImage.texture = textureHolder.GetTexture();
+            this.textureHolder = textureHolder;
+            this.size = size;
+            textureHolder.ChangeTextureEvent += TextureOwner_ChangeTextureEvent;
 
-        Fit();
-    }
+            Fit();
+        }
 
-    private void TextureOwner_ChangeTextureEvent(Texture texture)
-    {
-        rawImage.texture = textureHolder.GetTexture();
-        Fit();
-    }
+        private void TextureOwner_ChangeTextureEvent(Texture texture)
+        {
+            rawImage.texture = textureHolder.GetTexture();
+            Fit();
+        }
 
-    void Fit()
-    {
-        if (this.Texture == null) return;
-        var s = EMath.GetShrinkFitSize(new Vector2(this.Texture.width, this.Texture.height), size);
-        this.rawImage.rectTransform.sizeDelta = s;
-    }
+        void Fit()
+        {
+            if (this.Texture == null) return;
+            var s = EMath.GetShrinkFitSize(new Vector2(this.Texture.width, this.Texture.height), size);
+            this.rawImage.rectTransform.sizeDelta = s;
+        }
 
-    public void OnClicked()
-    {
-        print("clicked");
-        if (ClickEvent != null) ClickEvent(this);
+        public void OnClicked()
+        {
+            print("clicked");
+            if (ClickEvent != null) ClickEvent(this);
+        }
     }
 }

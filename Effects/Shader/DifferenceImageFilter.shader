@@ -1,4 +1,4 @@
-﻿Shader "Hidden/DifferenceImageFilter"
+﻿Shader "UtilPack4Unity/Filter/DifferenceImageFilter"
 {
 	Properties
 	{

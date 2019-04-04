@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class MonitorSettings {
-    public bool IsEnable;
-    public int TargetMonitor;
+namespace UtilPack4Unity
+{
+    public class MonitorSettings
+    {
+        public bool IsEnable;
+        public int TargetMonitor;
+    }
 }

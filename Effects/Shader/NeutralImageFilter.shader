@@ -1,4 +1,4 @@
-﻿Shader "Hidden/NeutralImageFilter"
+﻿Shader "UtilPack4Unity/Filter/NeutralImageFilter"
 {
 	Properties
 	{

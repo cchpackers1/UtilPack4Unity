@@ -3,94 +3,97 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Sequencer : MonoBehaviour
+namespace UtilPack4Unity
 {
-    [SerializeField]
-    bool isMulti;
-    IEnumerator coroutine;
-    public bool IsSuspend
+    public class Sequencer : MonoBehaviour
     {
-        get;
-        private set;
-    }
-
-    public void Suspend()
-    {
-        IsSuspend = true;
-    }
-
-    public void Resume()
-    {
-        IsSuspend = false;
-    }
-
-    public void Play(float duration, Action callback = null, Action<float> updateCallback = null)
-    {
-        if (this.gameObject == null)
+        [SerializeField]
+        bool isMulti;
+        IEnumerator coroutine;
+        public bool IsSuspend
         {
-            return;
+            get;
+            private set;
         }
 
-        if (!this.gameObject.activeInHierarchy)
+        public void Suspend()
         {
-            //Debug.LogWarning(this.gameObject.name + " is not active in hierarchy");
-            return;
+            IsSuspend = true;
         }
 
-        if (isMulti)
+        public void Resume()
         {
-            StartCoroutine(PlayRoutine(duration, callback, updateCallback));
+            IsSuspend = false;
         }
-        else
-        {
-            Stop();
-            coroutine = PlayRoutine(duration, callback, updateCallback);
-            StartCoroutine(coroutine);
-        }
-        
-    }
 
-    public void Stop()
-    {
-        if (coroutine != null)
+        public void Play(float duration, Action callback = null, Action<float> updateCallback = null)
         {
-            try
+            if (this.gameObject == null)
             {
-                StopCoroutine(coroutine);
+                return;
             }
-            catch
-            {
 
+            if (!this.gameObject.activeInHierarchy)
+            {
+                //Debug.LogWarning(this.gameObject.name + " is not active in hierarchy");
+                return;
             }
-        }
-    }
 
-    IEnumerator PlayRoutine(float duration, Action callback = null, Action<float> updateCallback = null)
-    {
-        float time = duration;
-        while (time > 0f)
-        {
-            if (!IsSuspend)
+            if (isMulti)
             {
-                time = Mathf.Clamp(time, 0f, duration);
-                if (updateCallback != null)
+                StartCoroutine(PlayRoutine(duration, callback, updateCallback));
+            }
+            else
+            {
+                Stop();
+                coroutine = PlayRoutine(duration, callback, updateCallback);
+                StartCoroutine(coroutine);
+            }
+
+        }
+
+        public void Stop()
+        {
+            if (coroutine != null)
+            {
+                try
                 {
-                    updateCallback(1f - (time / duration));
+                    StopCoroutine(coroutine);
                 }
-                time -= Time.deltaTime;
-            }
-            yield return new WaitForEndOfFrame();
-        }
-        if (updateCallback != null)
-        {
-            updateCallback(1f);
-        }
-        if (callback != null)
-        {
-            callback();
-        }
-        yield break;
-    }
+                catch
+                {
 
+                }
+            }
+        }
+
+        IEnumerator PlayRoutine(float duration, Action callback = null, Action<float> updateCallback = null)
+        {
+            float time = duration;
+            while (time > 0f)
+            {
+                if (!IsSuspend)
+                {
+                    time = Mathf.Clamp(time, 0f, duration);
+                    if (updateCallback != null)
+                    {
+                        updateCallback(1f - (time / duration));
+                    }
+                    time -= Time.deltaTime;
+                }
+                yield return new WaitForEndOfFrame();
+            }
+            if (updateCallback != null)
+            {
+                updateCallback(1f);
+            }
+            if (callback != null)
+            {
+                callback();
+            }
+            yield break;
+        }
+
+    }
 }
 

@@ -3,33 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
-public class KeySceneController : MonoBehaviour {
-    [SerializeField]
-    KeySceneInfo[] keySceneInfos;
-    public event Action<string> OnRequestChangeScene;
+namespace UtilPack4Unity
+{
+    public class KeySceneController : MonoBehaviour
+    {
+        [SerializeField]
+        KeySceneInfo[] keySceneInfos;
+        public event Action<string> OnRequestChangeScene;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        foreach (var keySceneInfo in keySceneInfos)
+        // Use this for initialization
+        void Start()
         {
-            if (Input.GetKeyDown(keySceneInfo.KeyCode))
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            foreach (var keySceneInfo in keySceneInfos)
             {
-                OnRequestChangeScene?.Invoke(keySceneInfo.SceneName);
-                SceneManager.LoadScene(keySceneInfo.SceneName);
-                break;
+                if (Input.GetKeyDown(keySceneInfo.KeyCode))
+                {
+                    OnRequestChangeScene?.Invoke(keySceneInfo.SceneName);
+                    SceneManager.LoadScene(keySceneInfo.SceneName);
+                    break;
+                }
             }
         }
-    }
 
-    [Serializable]
-    public struct KeySceneInfo
-    {
-        public KeyCode KeyCode;
-        public string SceneName;
+        [Serializable]
+        public struct KeySceneInfo
+        {
+            public KeyCode KeyCode;
+            public string SceneName;
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 
-namespace Ease
+namespace UtilPack4Unity
 {
     public class Easing
     {
@@ -11,7 +11,7 @@ namespace Ease
         {
             try
             {
-                var mi = typeof(Ease.Easing).GetMethod(methodName);
+                var mi = typeof(UtilPack4Unity.Easing).GetMethod(methodName);
                 return (float)mi.Invoke(null, new object[] { t });
             }
             catch

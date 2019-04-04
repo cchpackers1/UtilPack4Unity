@@ -2,180 +2,184 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-public class WebCamController : CaptureDeviceTextureHolder
+namespace UtilPack4Unity
 {
-    // Use this for initialization
-
-    //public event Callback UpdateFrameEvent;
-    [SerializeField]
-    bool playOnStart;
-
-    [SerializeField]
-    bool isUseDeviceName;
-    [SerializeField]
-    string deviceName;
-    [SerializeField]
-    int deviceId, width, height, fps;
-
-    IEnumerator readyCoroutine;
-
-    public WebCamTexture webCamTexture
+    public class WebCamController : CaptureDeviceTextureHolder
     {
-        get;
-        private set;
-    }
+        // Use this for initialization
 
-    public override Texture GetTexture()
-    {
-        return webCamTexture;
-    }
+        //public event Callback UpdateFrameEvent;
+        [SerializeField]
+        bool playOnStart;
 
-    private void Start()
-    {
-        if (playOnStart)
+        [SerializeField]
+        bool isUseDeviceName;
+        [SerializeField]
+        string deviceName;
+        [SerializeField]
+        int deviceId, width, height, fps;
+
+        IEnumerator readyCoroutine;
+
+        public WebCamTexture webCamTexture
         {
-            if (WebCamTexture.devices.Length < 1) return;
-            if (!isUseDeviceName)
+            get;
+            private set;
+        }
+
+        public override Texture GetTexture()
+        {
+            return webCamTexture;
+        }
+
+        private void Start()
+        {
+            if (playOnStart)
             {
-                deviceId = Mathf.Min(deviceId, WebCamTexture.devices.Length - 1);
-                if (deviceId < 0) return;
-                deviceName = WebCamTexture.devices[deviceId].name;
+                if (WebCamTexture.devices.Length < 1) return;
+                if (!isUseDeviceName)
+                {
+                    deviceId = Mathf.Min(deviceId, WebCamTexture.devices.Length - 1);
+                    if (deviceId < 0) return;
+                    deviceName = WebCamTexture.devices[deviceId].name;
+                }
+
+
+                if (width < 1 || height < 1)
+                {
+                    Play(deviceName);
+                    return;
+                }
+                Play(deviceName, width, height, fps);
             }
+        }
+
+        public bool Play()
+        {
+            if (WebCamTexture.devices.Length < 1) return false;
+            return Play(WebCamTexture.devices[0].name);
+        }
+
+        public bool Play(int width, int height)
+        {
+            if (WebCamTexture.devices.Length < 1) return false;
+            return Play(WebCamTexture.devices[0].name, width, height);
+        }
+
+        public bool Play(int width, int height, int fps)
+        {
+            if (WebCamTexture.devices.Length < 1) return false;
+            return Play(WebCamTexture.devices[0].name, width, height, fps);
+        }
 
 
-            if (width < 1 || height < 1)
+        public bool Play(string deviceName)
+        {
+            if (WebCamTexture.devices.Count(e => e.name == deviceName) < 1)
             {
-                Play(deviceName);
-                return;
+                return Play();
             }
-            Play(deviceName, width, height, fps);
+            Stop();
+            webCamTexture = new WebCamTexture(deviceName);
+            StartCapture();
+            return true;
         }
-    }
 
-    public bool Play()
-    {
-        if (WebCamTexture.devices.Length < 1) return false;
-        return Play(WebCamTexture.devices[0].name);
-    }
-
-    public bool Play(int width, int height)
-    {
-        if (WebCamTexture.devices.Length < 1) return false;
-        return  Play(WebCamTexture.devices[0].name, width, height);
-    }
-
-    public bool Play(int width, int height, int fps)
-    {
-        if (WebCamTexture.devices.Length < 1) return false;
-        return Play(WebCamTexture.devices[0].name, width, height, fps);
-    }
-
-
-    public bool Play(string deviceName)
-    {
-        if (WebCamTexture.devices.Count(e => e.name == deviceName) < 1)
+        public bool Play(string deviceName, int width, int height)
         {
-            return Play();
+            if (WebCamTexture.devices.Count(e => e.name == deviceName) < 1)
+            {
+                return Play(width, height);
+            }
+            Stop();
+            webCamTexture = new WebCamTexture(deviceName, width, height);
+            StartCapture();
+            return true;
         }
-        Stop();
-        webCamTexture = new WebCamTexture(deviceName);
-        StartCapture();
-        return true;
-    }
 
-    public bool Play(string deviceName, int width, int height)
-    {
-        if (WebCamTexture.devices.Count(e => e.name == deviceName) < 1)
+        public bool Play(string deviceName, int width, int height, int fps)
         {
-            return Play(width, height);
+            if (WebCamTexture.devices.Count(e => e.name == deviceName) < 1)
+            {
+                return Play(width, height, fps);
+            }
+            Stop();
+            webCamTexture = new WebCamTexture(deviceName, width, height, fps);
+            StartCapture();
+            return true;
         }
-        Stop();
-        webCamTexture = new WebCamTexture(deviceName, width, height);
-        StartCapture();
-        return true;
-    }
 
-    public bool Play(string deviceName, int width, int height, int fps)
-    {
-        if (WebCamTexture.devices.Count(e => e.name == deviceName) < 1)
+        public void Stop()
         {
-            return Play(width, height, fps);
+            if (webCamTexture != null)
+            {
+                webCamTexture.Stop();
+                webCamTexture = null;
+            }
         }
-        Stop();
-        webCamTexture = new WebCamTexture(deviceName, width, height, fps);
-        StartCapture();
-        return true;
-    }
 
-    public void Stop()
-    {
-        if (webCamTexture != null)
+        public void Pause()
         {
-            webCamTexture.Stop();
-            webCamTexture = null;
+            if (webCamTexture != null)
+            {
+                webCamTexture.Pause();
+            }
         }
-    }
 
-    public void Pause()
-    {
-        if (webCamTexture != null)
+        void StartReadyRoutine()
         {
-            webCamTexture.Pause();
+            StopReadyRoutine();
+            readyCoroutine = ReadyRoutine();
+            StartCoroutine(readyCoroutine);
+            print("start routine...");
+
         }
-    }
 
-    void StartReadyRoutine()
-    {
-        StopReadyRoutine();
-        readyCoroutine = ReadyRoutine();
-        StartCoroutine(readyCoroutine);
-        print("start routine...");
-
-    }
-
-    void StopReadyRoutine()
-    {
-        if (readyCoroutine != null)
+        void StopReadyRoutine()
         {
-            print("stop routine...");
-            StopCoroutine(readyCoroutine);
-            readyCoroutine = null;
+            if (readyCoroutine != null)
+            {
+                print("stop routine...");
+                StopCoroutine(readyCoroutine);
+                readyCoroutine = null;
+            }
         }
-    }
 
-    private void StartCapture()
-    {
-        webCamTexture.Play();
-        StartReadyRoutine();
-    }
-
-    private void Update()
-    {
-        if (webCamTexture == null) return;
-        if (!webCamTexture.isPlaying) return;
-        if (!webCamTexture.didUpdateThisFrame) return;
-        RefreshTexture();
-
-        //if (UpdateFrameEvent != null) UpdateFrameEvent();
-    }
-
-    IEnumerator ReadyRoutine()
-    {
-        while (!webCamTexture.didUpdateThisFrame)
+        private void StartCapture()
         {
-            print("waiting device...");
-            yield return new WaitForEndOfFrame();
+            webCamTexture.Play();
+            StartReadyRoutine();
         }
-        print("on ready");
-        Available();
-        yield break;
-    }
 
-    private void OnDestroy()
-    {
-        Stop();
-        this.webCamTexture = null;
-    }
+        private void Update()
+        {
+            if (webCamTexture == null) return;
+            if (!webCamTexture.isPlaying) return;
+            if (!webCamTexture.didUpdateThisFrame) return;
+            RefreshTexture();
 
+            //if (UpdateFrameEvent != null) UpdateFrameEvent();
+        }
+
+        IEnumerator ReadyRoutine()
+        {
+            while (!webCamTexture.didUpdateThisFrame)
+            {
+                print("waiting device...");
+                yield return new WaitForEndOfFrame();
+            }
+            print("on ready");
+            Available();
+            yield break;
+        }
+
+        private void OnDestroy()
+        {
+            Stop();
+            this.webCamTexture = null;
+        }
+
+
+    }
 
 }

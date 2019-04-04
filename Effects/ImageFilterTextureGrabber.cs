@@ -3,60 +3,64 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class ImageFilterTextureGrabber : TextureHolderBase {
-    [SerializeField]
-    RenderTexture rt;
-    [SerializeField]
-    GrabbableImageFilter imageFilter;
-
-    public override Texture GetTexture()
+namespace UtilPack4Unity
+{
+    public class ImageFilterTextureGrabber : TextureHolderBase
     {
-        return rt;
-    }
+        [SerializeField]
+        RenderTexture rt;
+        [SerializeField]
+        GrabbableImageFilter imageFilter;
 
-    private void Start()
-    {
-        imageFilter.OnFilteredEvent += ImageFilterElement_OnFiltered;
-    }
-
-    private void ImageFilterElement_OnFiltered(RenderTexture destionation)
-    {
-        SecureRenderTexures(destionation);
-        Graphics.Blit(destionation, rt);
-    }
-
-    protected virtual void SecureRenderTexures(Texture texture)
-    {
-        if (rt == null)
+        public override Texture GetTexture()
         {
-            InitRenderTextures(texture);
+            return rt;
         }
-        else if (texture.width != this.rt.width || texture.height != this.rt.height)
+
+        private void Start()
         {
-            InitRenderTextures(texture);
+            imageFilter.OnFilteredEvent += ImageFilterElement_OnFiltered;
         }
-    }
 
-    protected virtual void InitRenderTextures(Texture texture)
-    {
-        Release();
-        this.rt = new RenderTexture(texture.width, texture.height, 24);
-    }
-
-    void Release()
-    {
-        if (this.rt != null)
+        private void ImageFilterElement_OnFiltered(RenderTexture destionation)
         {
-            rt.Release();
-            DestroyImmediate(rt);
-            rt = null;
+            SecureRenderTexures(destionation);
+            Graphics.Blit(destionation, rt);
         }
-        
-    }
 
-    protected void OnDestroy()
-    {
-        Release();
-        imageFilter.OnFilteredEvent -= ImageFilterElement_OnFiltered;
+        protected virtual void SecureRenderTexures(Texture texture)
+        {
+            if (rt == null)
+            {
+                InitRenderTextures(texture);
+            }
+            else if (texture.width != this.rt.width || texture.height != this.rt.height)
+            {
+                InitRenderTextures(texture);
+            }
+        }
+
+        protected virtual void InitRenderTextures(Texture texture)
+        {
+            Release();
+            this.rt = new RenderTexture(texture.width, texture.height, 24);
+        }
+
+        void Release()
+        {
+            if (this.rt != null)
+            {
+                rt.Release();
+                DestroyImmediate(rt);
+                rt = null;
+            }
+
+        }
+
+        protected void OnDestroy()
+        {
+            Release();
+            imageFilter.OnFilteredEvent -= ImageFilterElement_OnFiltered;
+        }
     }
 }

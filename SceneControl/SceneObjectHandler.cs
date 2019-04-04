@@ -2,126 +2,128 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-
-public class SceneObjectHandler : MonoBehaviour
+namespace UtilPack4Unity
 {
-    [SerializeField]
-    SceneObjectController[] sceneControllers;
-
-    List<SceneObjectController> activeSceneList;
-
-    void Awake()
+    public class SceneObjectHandler : MonoBehaviour
     {
-        activeSceneList = new List<SceneObjectController>();
-        //重複チェック
-        foreach (var sceneController in sceneControllers)
+        [SerializeField]
+        SceneObjectController[] sceneControllers;
+
+        List<SceneObjectController> activeSceneList;
+
+        void Awake()
         {
-            if (sceneControllers.Count(e => e.Id == sceneController.Id) > 1)
+            activeSceneList = new List<SceneObjectController>();
+            //重複チェック
+            foreach (var sceneController in sceneControllers)
             {
-                Debug.LogWarning("Duplicated Scene : " + sceneController.Id);
+                if (sceneControllers.Count(e => e.Id == sceneController.Id) > 1)
+                {
+                    Debug.LogWarning("Duplicated Scene : " + sceneController.Id);
+                }
             }
         }
-    }
 
-    public void SetScene(int id)
-    {
-        Display(id);
-
-    }
-
-    public void Display(int id)
-    {
-        var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
-        sceneController.Display();
-        if (!activeSceneList.Contains(sceneController))
+        public void SetScene(int id)
         {
-            activeSceneList.Add(sceneController);
+            Display(id);
+
         }
-    }
 
-    void Display(SceneObjectController sceneObjectController)
-    {
-        if (sceneObjectController != null)
+        public void Display(int id)
         {
-            sceneObjectController.Display();
-            if (!activeSceneList.Contains(sceneObjectController))
+            var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
+            sceneController.Display();
+            if (!activeSceneList.Contains(sceneController))
             {
-                activeSceneList.Add(sceneObjectController);
+                activeSceneList.Add(sceneController);
             }
         }
-    }
 
-    public void HideAllActiveScenes()
-    {
-        foreach (var scene in activeSceneList)
+        void Display(SceneObjectController sceneObjectController)
         {
-            scene.Hide();
+            if (sceneObjectController != null)
+            {
+                sceneObjectController.Display();
+                if (!activeSceneList.Contains(sceneObjectController))
+                {
+                    activeSceneList.Add(sceneObjectController);
+                }
+            }
         }
-    }
 
-    public void HideAllActiveScenes(int ignoreId)
-    {
-        var scenes = activeSceneList.Where(e => e.Id != ignoreId).ToArray();
-        if (scenes != null)
+        public void HideAllActiveScenes()
         {
-            foreach (var scene in scenes)
+            foreach (var scene in activeSceneList)
             {
                 scene.Hide();
             }
         }
-    }
 
-    public void HideAllActiveScenes(List<int> ignoreList = null)
-    {
-        if (ignoreList != null)
+        public void HideAllActiveScenes(int ignoreId)
         {
-            foreach (var activeScene in activeSceneList)
+            var scenes = activeSceneList.Where(e => e.Id != ignoreId).ToArray();
+            if (scenes != null)
             {
-                if (ignoreList.Count(e => e == activeScene.Id) < 1) Hide(activeScene);
+                foreach (var scene in scenes)
+                {
+                    scene.Hide();
+                }
             }
         }
-        else
+
+        public void HideAllActiveScenes(List<int> ignoreList = null)
         {
-            foreach (var activeScene in activeSceneList)
+            if (ignoreList != null)
             {
-               Hide(activeScene);
+                foreach (var activeScene in activeSceneList)
+                {
+                    if (ignoreList.Count(e => e == activeScene.Id) < 1) Hide(activeScene);
+                }
+            }
+            else
+            {
+                foreach (var activeScene in activeSceneList)
+                {
+                    Hide(activeScene);
+                }
             }
         }
-    }
 
-    void Hide(SceneObjectController sceneObjectController)
-    {
-        if (sceneObjectController != null)
+        void Hide(SceneObjectController sceneObjectController)
         {
-            sceneObjectController.Hide();
-            if (activeSceneList.Contains(sceneObjectController))
+            if (sceneObjectController != null)
             {
-                activeSceneList.Remove(sceneObjectController);
+                sceneObjectController.Hide();
+                if (activeSceneList.Contains(sceneObjectController))
+                {
+                    activeSceneList.Remove(sceneObjectController);
+                }
             }
         }
-    }
 
-    public void Hide(int id)
-    {
-        var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
-        Hide(sceneController);
-    }
+        public void Hide(int id)
+        {
+            var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
+            Hide(sceneController);
+        }
 
-    public void Play(int id)
-    {
-        var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
-        sceneController.Play();
-    }
+        public void Play(int id)
+        {
+            var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
+            sceneController.Play();
+        }
 
-    public void Stop(int id)
-    {
-        var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
-        sceneController.Stop();
-    }
+        public void Stop(int id)
+        {
+            var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
+            sceneController.Stop();
+        }
 
-    public void Pause(int id)
-    {
-        var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
-        sceneController.Pause();
+        public void Pause(int id)
+        {
+            var sceneController = sceneControllers.FirstOrDefault(e => e.Id == id);
+            sceneController.Pause();
+        }
     }
 }

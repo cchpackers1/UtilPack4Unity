@@ -4,146 +4,148 @@ using UnityEngine;
 using System;
 using System.Diagnostics;
 using System.IO;
-
-public class ProcessController
+namespace UtilPack4Unity
 {
-    public delegate void RedirectProcessMessage(ProcessMessage processMessage);
-    public event RedirectProcessMessage RedirectOutputEvent;
-    public event RedirectProcessMessage RedirectErrorEvent;
-
-    public delegate void OnExitProcess(ProcessController processController);
-    public event OnExitProcess ExitProessEvent;
-
-    public Process TargetProcess
+    public class ProcessController
     {
-        get;
-        private set;
-    }
+        public delegate void RedirectProcessMessage(ProcessMessage processMessage);
+        public event RedirectProcessMessage RedirectOutputEvent;
+        public event RedirectProcessMessage RedirectErrorEvent;
 
-    public int ProcessId
-    {
-        get;
-        private set;
-    }
+        public delegate void OnExitProcess(ProcessController processController);
+        public event OnExitProcess ExitProessEvent;
 
-    public string ProcessName
-    {
-        get;
-        private set;
-    }
-
-    public ProcessController()
-    {
-
-    }
-
-    public bool Execute(ProcessSettings settings)
-    {
-        if (settings.IsStreamingAssets)
+        public Process TargetProcess
         {
-            settings.FileName = Path.Combine(Application.streamingAssetsPath, settings.FileName);
+            get;
+            private set;
         }
-        else
+
+        public int ProcessId
         {
-            if (settings.IsRelativePath)
+            get;
+            private set;
+        }
+
+        public string ProcessName
+        {
+            get;
+            private set;
+        }
+
+        public ProcessController()
+        {
+
+        }
+
+        public bool Execute(ProcessSettings settings)
+        {
+            if (settings.IsStreamingAssets)
             {
-                settings.FileName = Path.GetFullPath(settings.FileName);
+                settings.FileName = Path.Combine(Application.streamingAssetsPath, settings.FileName);
             }
-        }
-
-        if (!settings.IsCommand)
-        {
-            if (!File.Exists(settings.FileName))
+            else
             {
-                return false;
+                if (settings.IsRelativePath)
+                {
+                    settings.FileName = Path.GetFullPath(settings.FileName);
+                }
             }
 
-        }
+            if (!settings.IsCommand)
+            {
+                if (!File.Exists(settings.FileName))
+                {
+                    return false;
+                }
 
-        TargetProcess = ProcessUtils.CreateProcess(settings);
+            }
+
+            TargetProcess = ProcessUtils.CreateProcess(settings);
 
 
-        if (TargetProcess.EnableRaisingEvents)
-        {
-            TargetProcess.Exited += Process_Exited;
-        }
-        if (TargetProcess.StartInfo.RedirectStandardOutput)
-        {
-            TargetProcess.OutputDataReceived += Process_OutputDataReceived;
-        }
-        if (TargetProcess.StartInfo.RedirectStandardError)
-        {
-            TargetProcess.ErrorDataReceived += Process_ErrorDataReceived;
-        }
-
-        var result = TargetProcess.Start();
-
-        if (result)
-        {
+            if (TargetProcess.EnableRaisingEvents)
+            {
+                TargetProcess.Exited += Process_Exited;
+            }
             if (TargetProcess.StartInfo.RedirectStandardOutput)
             {
-                TargetProcess.BeginOutputReadLine();
+                TargetProcess.OutputDataReceived += Process_OutputDataReceived;
             }
             if (TargetProcess.StartInfo.RedirectStandardError)
             {
-                TargetProcess.BeginErrorReadLine();
+                TargetProcess.ErrorDataReceived += Process_ErrorDataReceived;
             }
-            this.ProcessId = TargetProcess.Id;
-            this.ProcessName = TargetProcess.ProcessName;
+
+            var result = TargetProcess.Start();
+
+            if (result)
+            {
+                if (TargetProcess.StartInfo.RedirectStandardOutput)
+                {
+                    TargetProcess.BeginOutputReadLine();
+                }
+                if (TargetProcess.StartInfo.RedirectStandardError)
+                {
+                    TargetProcess.BeginErrorReadLine();
+                }
+                this.ProcessId = TargetProcess.Id;
+                this.ProcessName = TargetProcess.ProcessName;
+            }
+            else
+            {
+                DisposeProcess();
+            }
+
+            return result;
         }
-        else
+
+        public void WriteLine(string line)
+        {
+            TargetProcess.StandardInput.WriteLine(line);
+        }
+
+        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            var process = (Process)sender;
+            var msg = new ProcessMessage(this, e.Data);
+            if (RedirectErrorEvent != null) RedirectErrorEvent(msg);
+        }
+
+        private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            var process = (Process)sender;
+            var msg = new ProcessMessage(this, e.Data);
+            if (RedirectOutputEvent != null) RedirectOutputEvent(msg);
+        }
+
+        private void Process_Exited(object sender, EventArgs e)
+        {
+            var process = (Process)sender;
+            if (ExitProessEvent != null) ExitProessEvent(this);
+        }
+
+        public void DisposeProcess()
+        {
+            if (TargetProcess != null)
+            {
+                if (!TargetProcess.HasExited)
+                {
+                    TargetProcess.CancelErrorRead();
+                    TargetProcess.CancelOutputRead();
+                    TargetProcess.Kill();
+                    TargetProcess.Dispose();
+                }
+                TargetProcess = null;
+            }
+        }
+
+        public void Dispose()
         {
             DisposeProcess();
+            ExitProessEvent = null;
+            RedirectOutputEvent = null;
+            RedirectErrorEvent = null;
         }
-
-        return result;
-    }
-
-    public void WriteLine(string line)
-    {
-        TargetProcess.StandardInput.WriteLine(line);
-    }
-
-    private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-    {
-        var process = (Process)sender;
-        var msg = new ProcessMessage(this, e.Data);
-        if (RedirectErrorEvent != null) RedirectErrorEvent(msg);
-    }
-
-    private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
-    {
-        var process = (Process)sender;
-        var msg = new ProcessMessage(this, e.Data);
-        if (RedirectOutputEvent != null) RedirectOutputEvent(msg);
-    }
-
-    private void Process_Exited(object sender, EventArgs e)
-    {
-        var process = (Process)sender;
-        if (ExitProessEvent != null) ExitProessEvent(this);
-    }
-
-    public void DisposeProcess()
-    {
-        if (TargetProcess != null)
-        {
-            if (!TargetProcess.HasExited)
-            {
-                TargetProcess.CancelErrorRead();
-                TargetProcess.CancelOutputRead();
-                TargetProcess.Kill();
-                TargetProcess.Dispose();
-            }
-            TargetProcess = null;
-        }
-    }
-
-    public void Dispose()
-    {
-        DisposeProcess();
-        ExitProessEvent = null;
-        RedirectOutputEvent = null;
-        RedirectErrorEvent = null;
     }
 }

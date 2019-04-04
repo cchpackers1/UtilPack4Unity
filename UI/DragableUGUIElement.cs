@@ -4,36 +4,39 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(RectTransform))]
-public class DragableUGUIElement : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+namespace UtilPack4Unity
 {
-    RectTransform rectTransform;
-
-    private void Awake()
+    [RequireComponent(typeof(RectTransform))]
+    public class DragableUGUIElement : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        rectTransform = GetComponent<RectTransform>();
-    }
-    void Start()
-    {
+        RectTransform rectTransform;
 
-    }
+        private void Awake()
+        {
+            rectTransform = GetComponent<RectTransform>();
+        }
+        void Start()
+        {
 
-    // Update is called once per frame
-    void Update()
-    {
+        }
 
-    }
+        // Update is called once per frame
+        void Update()
+        {
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-    }
+        }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        rectTransform.position += new Vector3(eventData.delta.x, eventData.delta.y, 0.0f);
-    }
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+        }
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
+        public void OnDrag(PointerEventData eventData)
+        {
+            rectTransform.position += new Vector3(eventData.delta.x, eventData.delta.y, 0.0f);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+        }
     }
 }

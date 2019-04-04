@@ -1,4 +1,4 @@
-﻿Shader "Hidden/RBump2NormalImageFilter"
+﻿Shader "UtilPack4Unity/Filter/RBump2NormalImageFilter"
 {
 	Properties
 	{

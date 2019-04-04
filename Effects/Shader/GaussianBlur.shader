@@ -1,4 +1,4 @@
-﻿Shader "Hidden/GaussianBlur"
+﻿Shader "UtilPack4Unity/Filter/GaussianBlur"
 {
 	Properties
 	{

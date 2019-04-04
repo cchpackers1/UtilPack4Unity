@@ -1,4 +1,4 @@
-﻿Shader "Hidden/SobelFilter"
+﻿Shader "UtilPack4Unity/Filter/SobelFilter"
 {
 	Properties
 	{

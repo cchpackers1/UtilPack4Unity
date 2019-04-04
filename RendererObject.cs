@@ -1,18 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class RendererObject : MonoBehaviour {
-
-    protected virtual void OnDestroy()
+namespace UtilPack4Unity
+{
+    public class RendererObject : MonoBehaviour
     {
-        var renderers = GetComponentsInChildren<Renderer>();
-        foreach (var r in renderers)
+
+        protected virtual void OnDestroy()
         {
-            var materials = r.materials;
-            foreach (var m in materials)
+            var renderers = GetComponentsInChildren<Renderer>();
+            foreach (var r in renderers)
             {
-                DestroyImmediate(m);
+                var materials = r.materials;
+                foreach (var m in materials)
+                {
+                    DestroyImmediate(m);
+                }
             }
         }
     }

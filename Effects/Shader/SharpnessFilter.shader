@@ -1,4 +1,4 @@
-﻿Shader "Hidden/SharpnessFilter"
+﻿Shader "UtilPack4Unity/Filter/SharpnessFilter"
 {
 	Properties
 	{

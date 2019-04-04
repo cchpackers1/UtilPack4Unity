@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Persistence
+namespace UtilPack4Unity
 {
     public class Exportable
     {

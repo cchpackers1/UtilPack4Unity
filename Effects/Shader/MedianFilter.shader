@@ -1,4 +1,4 @@
-﻿Shader "Hidden/MedianFilter"
+﻿Shader "UtilPack4Unity/Filter/MedianFilter"
 {
 	Properties
 	{

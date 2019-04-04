@@ -4,41 +4,45 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class AlertButton :RendererObject {
-    Action callback;
-    [SerializeField]
-    Text label;
-
-    public void Init(AlertButtonInfo info)
+namespace UtilPack4Unity
+{
+    public class AlertButton : RendererObject
     {
-        this.label.text = info.Label;
-        this.callback = info.Callback;
-    }
+        Action callback;
+        [SerializeField]
+        Text label;
 
-    public void OnClicked()
-    {
-        if (this.callback != null) callback();
-    }
-
-    public void Dispose()
-    {
-        Destroy(this.gameObject);
-    }
-
-    protected override void OnDestroy()
-    {
-        this.callback = null;
-        base.OnDestroy();
-    }
-
-    public struct AlertButtonInfo
-    {
-        public string Label;
-        public Action Callback;
-        public AlertButtonInfo(string label, Action callback)
+        public void Init(AlertButtonInfo info)
         {
-            this.Label = label;
-            this.Callback = callback;
+            this.label.text = info.Label;
+            this.callback = info.Callback;
+        }
+
+        public void OnClicked()
+        {
+            if (this.callback != null) callback();
+        }
+
+        public void Dispose()
+        {
+            Destroy(this.gameObject);
+        }
+
+        protected override void OnDestroy()
+        {
+            this.callback = null;
+            base.OnDestroy();
+        }
+
+        public struct AlertButtonInfo
+        {
+            public string Label;
+            public Action Callback;
+            public AlertButtonInfo(string label, Action callback)
+            {
+                this.Label = label;
+                this.Callback = callback;
+            }
         }
     }
 }

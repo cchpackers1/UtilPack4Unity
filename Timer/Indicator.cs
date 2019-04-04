@@ -2,84 +2,88 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Indicator : MonoBehaviour
+namespace UtilPack4Unity
 {
-    public float speed;
-    public bool isLoop;
-
-    bool isPlaying;
-    bool isForward;
-
-    public delegate void OnChangeValue(float value);
-    public event OnChangeValue CompleteEvent;
-    public event OnChangeValue UpdateEvent;
-
-
-    public float Value
+    public class Indicator : MonoBehaviour
     {
-        get;
-        private set;
-    }
+        public float speed;
+        public bool isLoop;
 
-    public void Play()
-    {
-        isForward = true;
-        isPlaying = true;
-    }
+        bool isPlaying;
+        bool isForward;
 
-    public void Rewind()
-    {
-        isForward = false;
-        isPlaying = true;
-    }
+        public delegate void OnChangeValue(float value);
+        public event OnChangeValue CompleteEvent;
+        public event OnChangeValue UpdateEvent;
 
-    public void Pause()
-    {
-        isPlaying = false;
-    }
 
-    public void Stop()
-    {
-        isPlaying = false;
-        Value = 0f;
-    }
-
-    void Update()
-    {
-        if (!isPlaying) return;
-        if (isForward)
+        public float Value
         {
-            Value += speed * Time.deltaTime;
-            if (Value >= 1f)
-            {
-                Value = Mathf.Clamp(Value, 0f, 1f);
-                if (CompleteEvent != null) CompleteEvent(1f);
-                if (isLoop)
-                {
-                    Value = 0f;
-                }
-            }else
-            {
-                Value = Mathf.Clamp(Value, 0f, 1f);
-                if (UpdateEvent != null) UpdateEvent(Value);
-            }
+            get;
+            private set;
         }
-        else
+
+        public void Play()
         {
-            Value -= speed * Time.deltaTime;
-            if (Value <= 0f)
+            isForward = true;
+            isPlaying = true;
+        }
+
+        public void Rewind()
+        {
+            isForward = false;
+            isPlaying = true;
+        }
+
+        public void Pause()
+        {
+            isPlaying = false;
+        }
+
+        public void Stop()
+        {
+            isPlaying = false;
+            Value = 0f;
+        }
+
+        void Update()
+        {
+            if (!isPlaying) return;
+            if (isForward)
             {
-                Value = Mathf.Clamp(Value, 0f, 1f);
-                if (CompleteEvent != null) CompleteEvent(0f);
-                if (isLoop)
+                Value += speed * Time.deltaTime;
+                if (Value >= 1f)
                 {
-                    Value = 1f;
+                    Value = Mathf.Clamp(Value, 0f, 1f);
+                    if (CompleteEvent != null) CompleteEvent(1f);
+                    if (isLoop)
+                    {
+                        Value = 0f;
+                    }
+                }
+                else
+                {
+                    Value = Mathf.Clamp(Value, 0f, 1f);
+                    if (UpdateEvent != null) UpdateEvent(Value);
                 }
             }
             else
             {
-                Value = Mathf.Clamp(Value, 0f, 1f);
-                if (UpdateEvent != null) UpdateEvent(Value);
+                Value -= speed * Time.deltaTime;
+                if (Value <= 0f)
+                {
+                    Value = Mathf.Clamp(Value, 0f, 1f);
+                    if (CompleteEvent != null) CompleteEvent(0f);
+                    if (isLoop)
+                    {
+                        Value = 1f;
+                    }
+                }
+                else
+                {
+                    Value = Mathf.Clamp(Value, 0f, 1f);
+                    if (UpdateEvent != null) UpdateEvent(Value);
+                }
             }
         }
     }

@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameObjectKeyToggle : MonoBehaviour {
-    [SerializeField]
-    KeyCode keyCode;
-    [SerializeField]
-    GameObject targetGameObject;
+namespace UtilPack4Unity
+{
+    public class GameObjectKeyToggle : MonoBehaviour
+    {
+        [SerializeField]
+        KeyCode keyCode;
+        [SerializeField]
+        GameObject targetGameObject;
 
-	void Update () {
-        if (Input.GetKeyDown(keyCode))
+        void Update()
         {
-            targetGameObject.SetActive(!targetGameObject.activeSelf);
+            if (Input.GetKeyDown(keyCode))
+            {
+                targetGameObject.SetActive(!targetGameObject.activeSelf);
+            }
         }
-	}
+    }
 }

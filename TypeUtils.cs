@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace TypeUtils
+namespace UtilPack4Unity.TypeUtils
 {
     [Serializable]
     public struct IntVec2

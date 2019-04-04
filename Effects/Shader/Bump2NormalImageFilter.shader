@@ -1,4 +1,4 @@
-﻿Shader "Hidden/Bump2NormalImageFilter"
+﻿Shader "UtilPack4Unity/Filter/Bump2NormalImageFilter"
 {
 	Properties
 	{

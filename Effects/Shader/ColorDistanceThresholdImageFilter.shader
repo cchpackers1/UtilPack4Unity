@@ -1,4 +1,4 @@
-﻿Shader "Hidden/ColorDistanceThresholdImageFilter"
+﻿Shader "UtilPack4Unity/Filter/ColorDistanceThresholdImageFilter"
 {
 	Properties
 	{

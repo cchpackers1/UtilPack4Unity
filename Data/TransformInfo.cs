@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Persistence
+namespace UtilPack4Unity
 {
     public class TransformInfo
     {

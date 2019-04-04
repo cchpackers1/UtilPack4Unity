@@ -1,6 +1,5 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "Hidden/InvertColorFilter"
+﻿
+Shader "UtilPack4Unity/Filter/InvertColorFilter"
 {
 	Properties
 	{

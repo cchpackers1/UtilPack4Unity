@@ -1,6 +1,6 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Hidden/FlipImageFilter"
+Shader "UtilPack4Unity/Filter/FlipImageFilter"
 {
 	Properties
 	{

@@ -1,4 +1,4 @@
-﻿Shader "Hidden/LaplacianFilter"
+﻿Shader "UtilPack4Unity/Filter/LaplacianFilter"
 {
 	Properties
 	{
