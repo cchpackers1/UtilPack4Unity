@@ -14,7 +14,23 @@ namespace UtilPack4Unity
             EXR
         }
 
-        public Texture2D SecureTexture(Texture referenceTexture, Texture2D texture, TextureFormat format = TextureFormat.RGBA32, bool mipChain = false)
+        public Texture2D SecureTexture(Texture2D texture, int width, int height, bool mipChain = false, TextureFormat format = TextureFormat.RGBA32)
+        {
+            if (texture == null)
+            {
+                texture = new Texture2D(width, height, format, mipChain);
+            }
+            else if (texture.width != width || texture.height != height)
+            {
+                var f = texture.format;
+                DestroyImmediate(texture);
+                texture = null;
+                texture = new Texture2D(width, height, f, mipChain);
+            }
+            return texture;
+        }
+
+        public Texture2D SecureTexture(Texture referenceTexture, Texture2D texture, bool mipChain = false, TextureFormat format = TextureFormat.RGBA32)
         {
             if (texture == null)
             {
@@ -22,9 +38,10 @@ namespace UtilPack4Unity
             }
             else if (texture.width != referenceTexture.width || texture.height != referenceTexture.height)
             {
+                var f = texture.format;
                 DestroyImmediate(texture);
                 texture = null;
-                texture = new Texture2D(referenceTexture.width, referenceTexture.height, format, mipChain);
+                texture = new Texture2D(referenceTexture.width, referenceTexture.height, f, mipChain);
             }
             return texture;
         }
@@ -37,10 +54,12 @@ namespace UtilPack4Unity
             }
             else if (texture.width != referenceTexture.width || texture.height != referenceTexture.height)
             {
+                var f = texture.format;
+                var d = texture.depth;
                 texture.Release();
                 DestroyImmediate(texture);
                 texture = null;
-                texture = new RenderTexture(texture.width, texture.height, depth, format);
+                texture = new RenderTexture(texture.width, texture.height, d, f);
             }
             return texture;
         }
