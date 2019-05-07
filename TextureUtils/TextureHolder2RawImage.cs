@@ -19,7 +19,7 @@ namespace UtilPack4Unity
         }
 
         // Update is called once per frame
-        void Update()
+        void LateUpdate()
         {
             rawImage.texture = textureHolder.GetTexture();
         }
