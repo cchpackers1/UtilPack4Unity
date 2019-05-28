@@ -20,7 +20,7 @@ namespace UtilPack4Unity
         protected RenderTexture[] rts;
         public override Texture GetTexture()
         {
-            return rts == null ? null : rts[0];
+            return GetRenderTexture();
         }
 
         public override RenderTexture GetRenderTexture()
@@ -46,8 +46,6 @@ namespace UtilPack4Unity
             this.rts = new RenderTexture[] { new RenderTexture(texture.width, texture.height, 24),
                  new RenderTexture(texture.width, texture.height, 24) };
         }
-
-
 
         void Release()
         {
@@ -99,6 +97,18 @@ namespace UtilPack4Unity
         private void ReOrder()
         {
             imageFilters = imageFilters.OrderBy(e => e.Id).ToList();
+        }
+
+        [ContextMenu("GetFilters")]
+        private void GetFilters()
+        {
+            var filters = GetComponentsInChildren<GrabbableImageFilter>();
+            imageFilters = new List<GrabbableImageFilter>();
+            foreach (var filter in filters)
+            {
+                imageFilters.Add(filter);
+            }
+            ReOrder();
         }
     }
 }

@@ -6,7 +6,8 @@ namespace UtilPack4Unity
     public class ThresholdImageFilter : GrabbableImageFilter
     {
         [SerializeField]
-        float threshold;
+        [Range(0,1)]
+        public float threshold;
 
         private void Reset()
         {

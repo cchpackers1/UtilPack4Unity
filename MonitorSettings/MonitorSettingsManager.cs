@@ -29,7 +29,7 @@ namespace UtilPack4Unity
                 }
                 if (settings.TargetMonitor < 0 || settings.TargetMonitor >= Display.displays.Length)
                 {
-                    OnError?.Invoke("選択されたモニター番号が正しくありません。");
+                    OnError?.Invoke("selected monitor number is incorrect.");
                     return;
                 }
 
@@ -41,7 +41,7 @@ namespace UtilPack4Unity
             }
             else
             {
-                OnError?.Invoke("設定ファイルがありません。");
+                OnError?.Invoke("There is no configuration file.");
                 return;
             }
         }

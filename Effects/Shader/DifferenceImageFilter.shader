@@ -15,7 +15,7 @@
 	#pragma target 5.0
 	#pragma vertex vert
 	#pragma fragment frag
-
+	#pragma multi_compile _ MONOTONE
 #include "UnityCG.cginc"
 
 		struct appdata
@@ -45,12 +45,21 @@
 
 	fixed4 frag(v2f i) : SV_Target
 	{
-			fixed4 result = fixed4(0,0,0,1);
-			fixed4 cache = tex2D(_CacheTex, i.uv);
-			fixed4 col = tex2D(_MainTex, i.uv);
-			if (distance(cache, col) > _Threshold) {
-				result = col;
-			}
+		fixed4 result = fixed4(0,0,0,1);
+		fixed4 cache = tex2D(_CacheTex, i.uv);
+		fixed4 col = tex2D(_MainTex, i.uv);
+		#ifdef MONOTONE
+		if (abs(cache.r - col.r) > _Threshold) {
+			result = col;
+		}
+		#else
+		if (distance(cache, col) > _Threshold) {
+			result = col;
+		}
+		#endif
+			
+			
+			
 			return result;
 	}
 		ENDCG

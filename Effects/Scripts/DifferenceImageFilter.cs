@@ -7,7 +7,21 @@ namespace UtilPack4Unity
     public class DifferenceImageFilter : GrabbableImageFilter
     {
         [SerializeField]
-        protected float threshold;
+        public float threshold;
+        [SerializeField]
+        bool monotone;
+
+        private void Start()
+        {
+            if (monotone)
+            {
+                material.EnableKeyword("MONOTONE");
+            }
+            else
+            {
+                material.DisableKeyword("MONOTONE");
+            }
+        }
 
         private void Reset()
         {
@@ -18,11 +32,6 @@ namespace UtilPack4Unity
         public void Capture()
         {
             Graphics.Blit(rts[0], rts[1]);
-        }
-
-        private void Start()
-        {
-            this.rts = new RenderTexture[2];
         }
 
         private void Update()

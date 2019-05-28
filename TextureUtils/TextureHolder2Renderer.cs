@@ -11,14 +11,13 @@ namespace UtilPack4Unity
         [SerializeField]
         Renderer renderer;
 
-        // Use this for initialization
-        void Start()
+        void Reset()
         {
-
+            this.renderer = GetComponent<Renderer>();
         }
 
         // Update is called once per frame
-        void Update()
+        void LateUpdate()
         {
             renderer.material.mainTexture = textureHolder.GetTexture();
         }
