@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UtilPack4Unity;
 
+[RequireComponent(typeof(Camera))]
 public class OrthoCameraController : MonoBehaviour
 {
+    [SerializeField]
     Camera cam;
     public Camera Cam
     {
         get
         {
             return cam;
+        }
+        private set
+        {
+            this.cam = value;
         }
     }
 
@@ -25,35 +31,52 @@ public class OrthoCameraController : MonoBehaviour
     public float zoomSpeed = 1f;
     
     private Vector3 defaultPosition;
-    public float defaultSize = 1f;
+    private Quaternion defaultRotation;
+    private float defaultSize = 1f;
+
     [SerializeField]
-    KeyCode resetKey;
+    float baseSize = 1f;
+    [SerializeField]
+    KeyCode saveKey, resetKey;
 
     public bool IsEnableControl = true;
 
     [SerializeField]
     string settingFileName;
 
-    private void Awake()
+    private void Reset()
     {
-        defaultPosition = this.transform.localPosition;
         cam = GetComponent<Camera>();
     }
-    // Use this for initialization
-    void Start()
+
+    private void Awake()
     {
+        if (Cam == null)
+        {
+            Cam = GetComponent<Camera>();
+        }
         Restore();
+        defaultSize = this.Cam.orthographicSize;
+        defaultPosition = this.transform.localPosition;
+        defaultRotation = this.transform.localRotation;
+        
     }
 
     public void Clear()
     {
         this.cam.orthographicSize = defaultSize;
         this.transform.localPosition = defaultPosition;
+        this.transform.localRotation = defaultRotation;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(saveKey))
+        {
+            Save();
+        }
+
         if (!IsEnableControl) return;
         if (Input.GetKeyDown(resetKey))
         {
@@ -84,7 +107,7 @@ public class OrthoCameraController : MonoBehaviour
             mouseMove.z = 0f;
             mouseMove *= -1f;
             var positionMove = this.transform.right * mouseMove.x + this.transform.up * mouseMove.y;
-            this.transform.localPosition += positionMove * moveSpeed * Time.deltaTime*(cam.orthographicSize/defaultSize);
+            this.transform.localPosition += positionMove * moveSpeed * Time.deltaTime*(cam.orthographicSize/ baseSize);
         }
     }
 

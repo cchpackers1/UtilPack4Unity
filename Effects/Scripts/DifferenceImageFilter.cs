@@ -29,6 +29,8 @@ namespace UtilPack4Unity
         }
 
         protected RenderTexture[] rts;
+
+        [ContextMenu("Capture")]
         public void Capture()
         {
             Graphics.Blit(rts[0], rts[1]);

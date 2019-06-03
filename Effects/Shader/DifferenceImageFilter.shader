@@ -48,14 +48,14 @@
 		fixed4 result = fixed4(0,0,0,1);
 		fixed4 cache = tex2D(_CacheTex, i.uv);
 		fixed4 col = tex2D(_MainTex, i.uv);
+		
 		#ifdef MONOTONE
-		if (abs(cache.r - col.r) > _Threshold) {
-			result = col;
-		}
+		float diff = abs(cache.r - col.r);
+		result.rgb = diff;
 		#else
-		if (distance(cache, col) > _Threshold) {
-			result = col;
-		}
+		float diff = distance(cache.rgb, col.rgb);
+		float maxDiff = distance(float3(0,0,0), float3(1,1,1));
+		result.rgb = (diff / maxDiff);
 		#endif
 			
 			

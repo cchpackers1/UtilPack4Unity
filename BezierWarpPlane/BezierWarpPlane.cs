@@ -99,7 +99,7 @@ public class BezierWarpPlane : MonoBehaviour
         AnchorPoints[3] = new Vector2(CornerPoints[2].x, CornerPoints[2].y + adjust.y);
         AnchorPoints[4] = new Vector2(CornerPoints[2].x - adjust.x, CornerPoints[2].y);
         AnchorPoints[5] = new Vector2(CornerPoints[3].x + adjust.x, CornerPoints[3].y);
-        AnchorPoints[6] = new Vector2(CornerPoints[3].x, CornerPoints[3].y + adjust.x);
+        AnchorPoints[6] = new Vector2(CornerPoints[3].x, CornerPoints[3].y + adjust.y);
         AnchorPoints[7] = new Vector2(CornerPoints[0].x, CornerPoints[0].y - adjust.y);
         
 

@@ -10,8 +10,15 @@ namespace UtilPack4Unity
         float interval;
         int frameCount;
         float elapsedTime;
+        [SerializeField]
+        bool isDump;
 
-        public float FrameRate;
+        public float FrameRate
+        {
+            get;
+            private set;
+        }
+
         // Use this for initialization
         void Awake()
         {
@@ -28,6 +35,10 @@ namespace UtilPack4Unity
                 FrameRate = (float)frameCount / elapsedTime;
                 frameCount = 0;
                 elapsedTime = 0f;
+                if (isDump)
+                {
+                    print(FrameRate);
+                }
             }
         }
     }

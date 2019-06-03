@@ -128,12 +128,13 @@ MonoBehaviour:
   lineColor: {r: 1, g: 1, b: 1, a: 0.5019608}
   controlPointPrefab: {fileID: 4328319054052250396, guid: 55c26b4b7d4d12c4fbb8957cadeef71e,
     type: 3}
-  controlPointSize: 0.2
+  controlPointSize: 0.1
   anchorPointColor: {r: 0, g: 1, b: 1, a: 0.5019608}
   cornerPointColor: {r: 1, g: 0, b: 1, a: 0.5019608}
   centerPointColor: {r: 1, g: 1, b: 0, a: 0.5019608}
   meshCollider: {fileID: 1078026304010611604}
   isStandalone: 1
   cam: {fileID: 0}
-  fileName: bezierWaro.json
+  fileName: bezierWarp.json
   saveKey: 115
+  resetKey: 99

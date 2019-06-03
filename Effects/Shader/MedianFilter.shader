@@ -72,7 +72,20 @@
 					table[i] = table[index];
 					table[index] = tmp;
 				}
-				return table[len / 2 - 1];
+				return table[4];
+			}
+
+			float getMedian(float array[9]) {
+				for (int i = 0; i < 8; i++) {
+					for (int j = 8; j > i; j--) {
+						if (array[j - 1] > array[j]) {
+							float temp = array[j - 1];
+							array[j - 1] = array[j];
+							array[j] = temp;
+						}
+					}
+				}
+				return array[4];
 			}
 			
 
@@ -102,7 +115,6 @@
 				float r = sort(rArray);
 				float g = sort(gArray);
 				float b = sort(bArray);
-				int index = 4;
 				return fixed4(r,g,b, 1);
 			}
 
