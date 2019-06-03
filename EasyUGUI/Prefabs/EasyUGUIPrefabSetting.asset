@@ -16,3 +16,12 @@ MonoBehaviour:
     type: 3}
   intSliderPrefab: {fileID: 3328287305117866752, guid: 8ed450c9689edcd4c9f9579f3751ac56,
     type: 3}
+  togglePrefab: {fileID: 3165194211336009487, guid: 1ca156994bff02047921d6586a0ad1e8,
+    type: 3}
+  intInputFieldPrefab: {fileID: 833447937921939724, guid: 0e4cf8ea8e2bf8d42ab6302e1d8b1018,
+    type: 3}
+  floatInputFieldPrefab: {fileID: 4694306023527298636, guid: 7c28284ce13891f449a9bf07b31558ad,
+    type: 3}
+  textInputFieldPrefab: {fileID: 6893549606976665654, guid: 89e783af91dc82c4db318994adadee61,
+    type: 3}
+  dropdownPrefab: {fileID: 0}

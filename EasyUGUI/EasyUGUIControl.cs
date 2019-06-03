@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class EasyUGUIControl : MonoBehaviour
 {
-    [SerializeField]
     protected string id;
     public string Id
     {

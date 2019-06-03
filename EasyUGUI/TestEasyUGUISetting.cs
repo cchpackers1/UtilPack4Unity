@@ -7,7 +7,7 @@ using EasyUGUI;
 public class TestEasyUGUISetting : EasyUGUISetting
 {
     [EasyUGUIControllable]
-    [Range(0, 1)]
+    [Range(0, 5)]
     public float foo;
     [EasyUGUIControllable]
     [SerializeField]

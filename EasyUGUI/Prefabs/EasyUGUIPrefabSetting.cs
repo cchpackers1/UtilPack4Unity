@@ -25,5 +25,55 @@ namespace EasyUGUI {
                 return intSliderPrefab;
             }
         }
+
+        [SerializeField]
+        private GameObject togglePrefab;
+        public GameObject TogglePrefab
+        {
+            get
+            {
+                return togglePrefab;
+            }
+        }
+
+        [SerializeField]
+        private GameObject intInputFieldPrefab;
+        public GameObject IntInputFieldPrefab
+        {
+            get
+            {
+                return intInputFieldPrefab;
+            }
+        }
+
+        [SerializeField]
+        private GameObject floatInputFieldPrefab;
+        public GameObject FloatInputFieldPrefab
+        {
+            get
+            {
+                return floatInputFieldPrefab;
+            }
+        }
+
+        [SerializeField]
+        private GameObject textInputFieldPrefab;
+        public GameObject TextInputFieldPrefab
+        {
+            get
+            {
+                return textInputFieldPrefab;
+            }
+        }
+
+        [SerializeField]
+        private GameObject dropdownPrefab;
+        public GameObject DropdownPrefab
+        {
+            get
+            {
+                return dropdownPrefab;
+            }
+        }
     }
 }
