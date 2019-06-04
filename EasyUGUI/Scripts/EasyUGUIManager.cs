@@ -31,15 +31,10 @@ namespace EasyUGUI
             }
         }
 
-        private void Awake()
+        private void Start()
         {
             Init();
             Restore();
-
-        }
-
-        private void Start()
-        {
             setting.OnUpdate();
         }
 
