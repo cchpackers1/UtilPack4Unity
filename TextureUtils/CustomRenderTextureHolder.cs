@@ -21,7 +21,7 @@ namespace UtilPack4Unity
         // Update is called once per frame
         void Update()
         {
-            customRenderTexture.Update(1);
+            customRenderTexture.Update(count);
         }
     }
 }

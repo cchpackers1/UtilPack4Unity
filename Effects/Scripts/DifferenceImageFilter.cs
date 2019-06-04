@@ -7,9 +7,7 @@ namespace UtilPack4Unity
     public class DifferenceImageFilter : GrabbableImageFilter
     {
         [SerializeField]
-        public float threshold;
-        [SerializeField]
-        bool monotone;
+        public bool monotone;
 
         private void Start()
         {
@@ -38,7 +36,6 @@ namespace UtilPack4Unity
 
         private void Update()
         {
-            this.material.SetFloat("_Threshold", threshold);
             this.material.SetTexture("_CacheTex", rts[1]);
         }
 

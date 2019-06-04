@@ -8,20 +8,48 @@ namespace UtilPack4Unity
     {
 
         [SerializeField]
-        bool isFlipX, isFlipY;
+        private bool isFlipX, isFlipY;
+
+        public bool IsFlipX
+        {
+            get
+            {
+                return isFlipX;
+            }
+            set
+            {
+                this.isFlipX = value;
+                FlipX();
+            }
+        }
+
+        public bool IsFlipY
+        {
+            get
+            {
+                return isFlipY;
+            }
+            set
+            {
+                this.isFlipY = value;
+                FlipY();
+            }
+        }
+
+        private void Start()
+        {
+            print(this.material);
+            FlipX();
+            FlipY();
+        }
+
 
         private void Reset()
         {
             this.shader = Shader.Find("UtilPack4Unity/Filter/FlipImageFilter");
         }
 
-        void Update()
-        {
-            FlipX();
-            FlipY();
-        }
-
-        void FlipX()
+        private void FlipX()
         {
             if (isFlipX)
             {
@@ -33,12 +61,11 @@ namespace UtilPack4Unity
             }
         }
 
-        void FlipY()
+        private void FlipY()
         {
             if (isFlipY)
             {
                 material.EnableKeyword("FlipY");
-                //print("flipY");
             }
             else
             {

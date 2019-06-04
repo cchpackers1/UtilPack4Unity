@@ -41,8 +41,6 @@
 	sampler2D _MainTex;
 	sampler2D _CacheTex;
 
-	float _Threshold;
-
 	fixed4 frag(v2f i) : SV_Target
 	{
 		fixed4 result = fixed4(0,0,0,1);
