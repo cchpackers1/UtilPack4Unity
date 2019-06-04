@@ -7,6 +7,16 @@ namespace EasyUGUI {
     public class EasyUGUIPrefabSetting : ScriptableObject
     {
         [SerializeField]
+        private GameObject pannelPrefab;
+        public GameObject PannelPrefab
+        {
+            get
+            {
+                return pannelPrefab;
+            }
+        }
+
+        [SerializeField]
         private GameObject floatSliderPrefab;
         public GameObject FloatSliderPrefab
         {
@@ -63,6 +73,16 @@ namespace EasyUGUI {
             get
             {
                 return textInputFieldPrefab;
+            }
+        }
+
+        [SerializeField]
+        private GameObject multilineTextInputFieldPrefab;
+        public GameObject MultilineTextInputFieldPrefab
+        {
+            get
+            {
+                return multilineTextInputFieldPrefab;
             }
         }
 

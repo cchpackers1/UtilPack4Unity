@@ -20,7 +20,16 @@ namespace EasyUGUI
         [SerializeField]
         string fileName;
         [SerializeField]
-        private Transform uiParent;
+        private Transform parent;
+        [SerializeField]
+        string id;
+        public string Id
+        {
+            get
+            {
+                return id;
+            }
+        }
 
         private void Start()
         {
@@ -33,27 +42,52 @@ namespace EasyUGUI
         {
             var fields = setting.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             pairList = new List<FieldControlPair>();
+            var pannelObject = Instantiate(prefabSetting.PannelPrefab) as GameObject;
+            pannelObject.transform.SetParent(parent, false);
+            var pannel = pannelObject.GetComponent<EasyUGUIPannel>();
+            pannel.Title = id;
+            pannel.SaveEvent += Pannel_SaveEvent;
+            pannel.ReloadEvent += Pannel_ReloadEvent;
             foreach (var field in fields)
             {
                 var controllableAttribute = field.GetCustomAttribute<EasyUGUIControllableAttribute>();
                 if (controllableAttribute == null) continue;
                 var type = field.FieldType;
                 var rangeAttribute = field.GetCustomAttribute<RangeAttribute>();
+
                 if (type.IsEnum)
                 {
-
+                    var list = new List<string>();
+                    foreach (var elm in Enum.GetValues(type))
+                    {
+                        list.Add(elm.ToString());
+                    }
+                    var go = Instantiate(prefabSetting.DropdownPrefab) as GameObject;
+                    var component = go.GetComponent<EasyUGUIDropdown>();
+                    component.Id = field.Name;
+                    component.Init(list, field.FieldType);
+                    pairList.Add(new FieldControlPair(field, component));
+                    pannel.AddControl(go);
                 }
                 else if (type.Name == typeof(float).Name)
                 {
                     if (rangeAttribute != null)
                     {
                         var go = Instantiate(prefabSetting.FloatSliderPrefab) as GameObject;
-                        go.transform.SetParent(uiParent, false);
                         var component = go.GetComponent<EasyUGUIFloatSlider>();
                         component.MinValue = rangeAttribute.min;
                         component.MaxValue = rangeAttribute.max;
                         component.Id = field.Name;
                         pairList.Add(new FieldControlPair(field, component));
+                        pannel.AddControl(go);
+                    }
+                    else
+                    {
+                        var go = Instantiate(prefabSetting.FloatInputFieldPrefab) as GameObject;
+                        var component = go.GetComponent<EasyUGUIFloatInputField>();
+                        component.Id = field.Name;
+                        pairList.Add(new FieldControlPair(field, component));
+                        pannel.AddControl(go);
                     }
                 }
                 else if (type.Name == typeof(int).Name)
@@ -61,12 +95,20 @@ namespace EasyUGUI
                     if (rangeAttribute != null)
                     {
                         var go = Instantiate(prefabSetting.IntSliderPrefab) as GameObject;
-                        go.transform.SetParent(uiParent, false);
                         var component = go.GetComponent<EasyUGUIIntSlider>();
                         component.Id = field.Name;
                         component.MinValue = (int)rangeAttribute.min;
                         component.MaxValue = (int)rangeAttribute.max;
                         pairList.Add(new FieldControlPair(field, component));
+                        pannel.AddControl(go);
+                    }
+                    else
+                    {
+                        var go = Instantiate(prefabSetting.IntInputFieldPrefab) as GameObject;
+                        var component = go.GetComponent<EasyUGUIIntInputField>();
+                        component.Id = field.Name;
+                        pairList.Add(new FieldControlPair(field, component));
+                        pannel.AddControl(go);
                     }
                 }
                 else if (type.Name == typeof(string).Name)
@@ -85,11 +127,20 @@ namespace EasyUGUI
             }
         }
 
+        private void Pannel_ReloadEvent()
+        {
+            Restore();
+        }
+
+        private void Pannel_SaveEvent()
+        {
+            Save();
+        }
+
         private void Control_ValueChangedEvent(EasyUGUIControl control, object value)
         {
             var field = pairList.FirstOrDefault(e => e.fieldInfo.Name == control.Id).fieldInfo;
             if (field == null) return;
-            print("change");
             field.SetValue(setting, value);
             setting.OnUpdate(control.Id, value);
         }
@@ -102,10 +153,18 @@ namespace EasyUGUI
             foreach (var elm in list)
             {
                 var pair = pairList.FirstOrDefault(e => e.fieldInfo.Name == elm.FieldName && e.fieldInfo.FieldType.Name == elm.TypeName);
-                var value = Convert.ChangeType(elm.Value, pair.fieldInfo.FieldType);
-                pair.fieldInfo.SetValue(setting, value);
-                pair.easyUGUIControl.SetValue(value);
-                //var value = 
+                if (pair.fieldInfo.FieldType.IsEnum)
+                {
+                    var value = Enum.ToObject(pair.fieldInfo.FieldType, elm.Value);
+                    pair.fieldInfo.SetValue(setting, value);
+                    pair.easyUGUIControl.SetValue(value);
+                }
+                else
+                {
+                    var value = Convert.ChangeType(elm.Value, pair.fieldInfo.FieldType);
+                    pair.fieldInfo.SetValue(setting, value);
+                    pair.easyUGUIControl.SetValue(value);
+                }
             }
         }
 
