@@ -7,7 +7,7 @@ using System;
 public class ImageFilterGroupExecutor : MonoBehaviour
 {
     [SerializeField]
-    TextureHolderBase textureHolder;
+    public TextureHolderBase textureHolder;
     [SerializeField]
     ImageFilterGroup imageFilterGroup;
 

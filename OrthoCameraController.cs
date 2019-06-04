@@ -55,11 +55,13 @@ public class OrthoCameraController : MonoBehaviour
         {
             Cam = GetComponent<Camera>();
         }
-        Restore();
+        
         defaultSize = this.Cam.orthographicSize;
         defaultPosition = this.transform.localPosition;
         defaultRotation = this.transform.localRotation;
-        
+
+        Restore();
+
     }
 
     public void Clear()

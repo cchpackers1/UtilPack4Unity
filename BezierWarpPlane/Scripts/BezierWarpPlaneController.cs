@@ -175,7 +175,6 @@ public class BezierWarpPlaneController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 Touch(cam, worldMousePos);
-                print("touch");
             }
 
             if (Input.GetKey(KeyCode.Space))
