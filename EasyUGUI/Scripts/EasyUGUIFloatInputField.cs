@@ -22,7 +22,11 @@ namespace EasyUGUI
 
         public void OnValueChanged(string value)
         {
-            var v = float.Parse(value);
+            var v = 0f;
+            if(!float.TryParse(value, out v))
+            {
+                inputField.text = v.ToString();
+            }
             base.OnValueChanged(v);
         }
     }

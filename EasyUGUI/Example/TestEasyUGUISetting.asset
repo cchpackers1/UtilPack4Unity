@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da4e6d140a3395e499b339ac58a7f0bc, type: 3}
   m_Name: TestEasyUGUISetting
   m_EditorClassIdentifier: 
-  foo: 0
+  foo: 7.367324
   bar: 1
-  type: 0
+  type: 1
+  test: 
+  aaa: 5

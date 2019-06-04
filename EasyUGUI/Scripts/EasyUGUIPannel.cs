@@ -28,6 +28,18 @@ namespace EasyUGUI
         public event Action SaveEvent;
         public event Action ReloadEvent;
 
+        public bool IsOpened
+        {
+            get
+            {
+                return container.activeSelf;
+            }
+            set
+            {
+                container.SetActive(value);
+            }
+        }
+
         public void AddControl(GameObject gameObject)
         {
             gameObject.transform.SetParent(container.transform, false);

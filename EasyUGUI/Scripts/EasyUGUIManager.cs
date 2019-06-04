@@ -14,15 +14,15 @@ namespace EasyUGUI
         [SerializeField]
         private EasyUGUIPrefabSetting prefabSetting;
         [SerializeField]
-        protected EasyUGUISetting setting;
-        List<FieldControlPair> pairList;
+        private EasyUGUISetting setting;
+        private List<FieldControlPair> pairList;
 
         [SerializeField]
-        string fileName;
+        private string fileName;
         [SerializeField]
         private Transform parent;
         [SerializeField]
-        string id;
+        private string id;
         public string Id
         {
             get
@@ -31,11 +31,16 @@ namespace EasyUGUI
             }
         }
 
-        private void Start()
+        private void Awake()
         {
-            print(prefabSetting);
             Init();
             Restore();
+
+        }
+
+        private void Start()
+        {
+            setting.OnUpdate();
         }
 
         private void Init()
@@ -44,14 +49,13 @@ namespace EasyUGUI
             pairList = new List<FieldControlPair>();
             var pannelObject = Instantiate(prefabSetting.PannelPrefab) as GameObject;
             pannelObject.transform.SetParent(parent, false);
+            pannelObject.name = "EasyUGUIPannel(" + Id + ")";
             var pannel = pannelObject.GetComponent<EasyUGUIPannel>();
-            pannel.Title = id;
+            pannel.Title = Id;
             pannel.SaveEvent += Pannel_SaveEvent;
             pannel.ReloadEvent += Pannel_ReloadEvent;
             foreach (var field in fields)
             {
-                var controllableAttribute = field.GetCustomAttribute<EasyUGUIControllableAttribute>();
-                if (controllableAttribute == null) continue;
                 var type = field.FieldType;
                 var rangeAttribute = field.GetCustomAttribute<RangeAttribute>();
 
@@ -113,11 +117,31 @@ namespace EasyUGUI
                 }
                 else if (type.Name == typeof(string).Name)
                 {
-
+                    var multilineAttribute = field.GetCustomAttribute<MultilineTextAttribute>();
+                    if (multilineAttribute != null)
+                    {
+                        var go = Instantiate(prefabSetting.MultilineTextInputFieldPrefab) as GameObject;
+                        var component = go.GetComponent<EasyUGUITextInputField>();
+                        component.Id = field.Name;
+                        pairList.Add(new FieldControlPair(field, component));
+                        pannel.AddControl(go);
+                    }
+                    else
+                    {
+                        var go = Instantiate(prefabSetting.TextInputFieldPrefab) as GameObject;
+                        var component = go.GetComponent<EasyUGUITextInputField>();
+                        component.Id = field.Name;
+                        pairList.Add(new FieldControlPair(field, component));
+                        pannel.AddControl(go);
+                    }
                 }
                 else if (type.Name == typeof(bool).Name)
                 {
-
+                    var go = Instantiate(prefabSetting.TogglePrefab) as GameObject;
+                    var component = go.GetComponent<EasyUGUIToggle>();
+                    component.Id = field.Name;
+                    pairList.Add(new FieldControlPair(field, component));
+                    pannel.AddControl(go);
                 }
             }
 
@@ -142,7 +166,7 @@ namespace EasyUGUI
             var field = pairList.FirstOrDefault(e => e.fieldInfo.Name == control.Id).fieldInfo;
             if (field == null) return;
             field.SetValue(setting, value);
-            setting.OnUpdate(control.Id, value);
+            setting.OnUpdate();
         }
 
         public void Restore()
@@ -153,6 +177,7 @@ namespace EasyUGUI
             foreach (var elm in list)
             {
                 var pair = pairList.FirstOrDefault(e => e.fieldInfo.Name == elm.FieldName && e.fieldInfo.FieldType.Name == elm.TypeName);
+                if (pair == null) continue;
                 if (pair.fieldInfo.FieldType.IsEnum)
                 {
                     var value = Enum.ToObject(pair.fieldInfo.FieldType, elm.Value);
@@ -167,8 +192,7 @@ namespace EasyUGUI
                 }
             }
         }
-
-        [ContextMenu("Save")]
+        
         public void Save()
         {
 

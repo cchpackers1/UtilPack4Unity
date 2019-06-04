@@ -89,7 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8315020243690520823}
   - component: {fileID: 8315020243690520817}
-  - component: {fileID: 8315020243690520816}
+  - component: {fileID: 2197527836484311650}
   m_Layer: 5
   m_Name: TextInputField
   m_TagString: Untagged
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
   m_ChildControlHeight: 0
---- !u!114 &8315020243690520816
+--- !u!114 &2197527836484311650
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8315020243690520822}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed047a6db39c9d34793a1f9dc181d77b, type: 3}
+  m_Script: {fileID: 11500000, guid: b7c9f47c9fa6a7e48a27d052ae4da623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   labelText: {fileID: 8315020243816269339}
@@ -482,7 +482,18 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2197527836484311650}
+        m_MethodName: OnValueChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.InputField+OnChangeEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}

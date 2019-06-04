@@ -6,10 +6,10 @@ using EasyUGUI;
 [CreateAssetMenu(fileName = "TestEasyUGUISetting.asset", menuName = "Custom/Create TestEasyUGUISetting")]
 public class TestEasyUGUISetting : EasyUGUISetting
 {
-    [EasyUGUIControllable]
+    [Range(0,10)]
     public float foo;
-    [EasyUGUIControllable]
     [SerializeField]
+    [Range(0,1)]
     private int bar;
 
     public enum Type
@@ -18,7 +18,10 @@ public class TestEasyUGUISetting : EasyUGUISetting
         BBBB,
         CCCC
     }
-    [EasyUGUIControllable]
     [SerializeField]
     Type type;
+    
+    [SerializeField]
+    [MultilineText]
+    private string str;
 }
