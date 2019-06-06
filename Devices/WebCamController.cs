@@ -156,7 +156,7 @@ namespace UtilPack4Unity
             if (webCamTexture == null) return;
             if (!webCamTexture.isPlaying) return;
             if (!webCamTexture.didUpdateThisFrame) return;
-            RefreshTexture();
+            OnTextureUpdated(this.GetTexture());
 
             //if (UpdateFrameEvent != null) UpdateFrameEvent();
         }

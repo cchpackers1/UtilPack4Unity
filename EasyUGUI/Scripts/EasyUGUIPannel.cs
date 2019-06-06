@@ -40,6 +40,18 @@ namespace EasyUGUI
             }
         }
 
+        public bool IsVisible
+        {
+            get
+            {
+                return this.gameObject.activeSelf;
+            }
+            set
+            {
+                this.gameObject.SetActive(value);
+            }
+        }
+
         public void AddControl(GameObject gameObject)
         {
             gameObject.transform.SetParent(container.transform, false);

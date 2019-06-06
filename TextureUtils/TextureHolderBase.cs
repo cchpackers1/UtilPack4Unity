@@ -12,20 +12,19 @@ namespace UtilPack4Unity
             return null;
         }
 
-        public virtual void SetTexture(Texture texture)
+        protected virtual void OnTextureInitialized(Texture texture)
         {
-            if (ChangeTextureEvent != null) ChangeTextureEvent(texture);
+            if (TextureInitializedEvent != null) TextureInitializedEvent(this, texture);
         }
 
-        public virtual void RefreshTexture()
+        protected virtual void OnTextureUpdated(Texture texture)
         {
-            if (RefreshTextureEvent != null) RefreshTextureEvent();
+            if (TextureUpdatedEvent != null) TextureUpdatedEvent(this, texture);
         }
 
-        public delegate void OnChanged(Texture texture);
-        public event OnChanged ChangeTextureEvent;
-        public delegate void OnRefresh();
-        public event OnRefresh RefreshTextureEvent;
+        public delegate void OnTextureChanged(TextureHolderBase sender, Texture texture);
+        public event OnTextureChanged TextureInitializedEvent;
+        public event OnTextureChanged TextureUpdatedEvent;
     }
 }
 

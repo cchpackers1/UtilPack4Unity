@@ -19,5 +19,21 @@ namespace UtilPack4Unity
         {
             return renderTexture;
         }
+
+        public virtual void OnRenderTextureInitialized(RenderTexture texture)
+        {
+            RenderTextureInitializedEvent?.Invoke(this, texture);
+            base.OnTextureInitialized(texture);
+        }
+
+        public virtual void OnRendeTextureUpdated(RenderTexture texture)
+        {
+            RenderTextureUpdatedEvent?.Invoke(this, texture);
+            base.OnTextureInitialized(texture);
+        }
+
+        public delegate void OnRenderTextureChanged(RenderTextureHolder sender, Texture texture);
+        public event OnRenderTextureChanged RenderTextureInitializedEvent;
+        public event OnRenderTextureChanged RenderTextureUpdatedEvent;
     }
 }

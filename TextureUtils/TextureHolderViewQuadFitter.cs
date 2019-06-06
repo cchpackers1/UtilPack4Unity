@@ -16,10 +16,10 @@ public class TextureHolderViewQuadFitter : MonoBehaviour
     void Awake()
     {
         renderer = GetComponent<Renderer>();
-        textureHolder.ChangeTextureEvent += VideoCaptureController_ChangeTextureEvent;
+        textureHolder.TextureInitializedEvent += VideoCaptureController_ChangeTextureEvent;
     }
 
-    private void VideoCaptureController_ChangeTextureEvent(Texture texture)
+    private void VideoCaptureController_ChangeTextureEvent(TextureHolderBase sender, Texture texture)
     {
         var frameSize = new Vector2(camera.orthographicSize * 2 * camera.aspect, camera.orthographicSize * 2);
         var size = EMath.GetShrinkFitSize(new Vector2(texture.width, texture.height), frameSize);

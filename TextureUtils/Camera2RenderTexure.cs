@@ -31,10 +31,6 @@ namespace UtilPack4Unity
         [SerializeField]
         protected int depth = 24;
 
-
-        public delegate void OnInitialized(RenderTexture renderTexture);
-        public event OnInitialized InitializedEvent;
-
         private void Reset()
         {
             if (cam == null)
@@ -45,7 +41,6 @@ namespace UtilPack4Unity
 
         protected virtual void Awake()
         {
-            this.InitializedEvent += Camera2RenderTexure_InitializedEvent;
             if (cam == null)
             {
                 cam = GetComponent<Camera>();
@@ -56,11 +51,6 @@ namespace UtilPack4Unity
             {
                 Init();
             }
-        }
-
-        private void Camera2RenderTexure_InitializedEvent(RenderTexture renderTexture)
-        {
-            SetTexture(renderTexture);
         }
 
         private void Start()
@@ -79,7 +69,7 @@ namespace UtilPack4Unity
                 this.renderTexture = new RenderTexture(w, h, depth);
             }
             cam.targetTexture = this.renderTexture;
-            if (InitializedEvent != null) InitializedEvent(this.renderTexture);
+            OnRenderTextureInitialized(this.renderTexture);
         }
 
         public virtual void Init(int w, int h, int depth)
@@ -91,7 +81,7 @@ namespace UtilPack4Unity
         {
             this.renderTexture = renderTexture;
             cam.targetTexture = renderTexture;
-            if (InitializedEvent != null) InitializedEvent(this.renderTexture);
+            OnRenderTextureInitialized(this.renderTexture);
         }
     }
 }

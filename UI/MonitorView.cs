@@ -40,12 +40,12 @@ namespace UtilPack4Unity
             rawImage.texture = textureHolder.GetTexture();
             this.textureHolder = textureHolder;
             this.size = size;
-            textureHolder.ChangeTextureEvent += TextureOwner_ChangeTextureEvent;
+            textureHolder.TextureInitializedEvent += TextureOwner_ChangeTextureEvent;
 
             Fit();
         }
 
-        private void TextureOwner_ChangeTextureEvent(Texture texture)
+        private void TextureOwner_ChangeTextureEvent(TextureHolderBase sender, Texture texture)
         {
             rawImage.texture = textureHolder.GetTexture();
             Fit();

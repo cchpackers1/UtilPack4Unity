@@ -17,6 +17,12 @@ namespace EasyUGUI
         private EasyUGUISetting setting;
         private List<FieldControlPair> pairList;
 
+        public EasyUGUIPannel Pannel
+        {
+            get;
+            private set;
+        }
+
         [SerializeField]
         private string fileName;
         [SerializeField]
@@ -35,7 +41,8 @@ namespace EasyUGUI
         {
             Init();
             Restore();
-            setting.OnUpdate();
+            setting.OnInitialized();
+            setting.OnUpdated();
         }
 
         private void Init()
@@ -45,10 +52,11 @@ namespace EasyUGUI
             var pannelObject = Instantiate(prefabSetting.PannelPrefab) as GameObject;
             pannelObject.transform.SetParent(parent, false);
             pannelObject.name = "EasyUGUIPannel(" + Id + ")";
-            var pannel = pannelObject.GetComponent<EasyUGUIPannel>();
-            pannel.Title = Id;
-            pannel.SaveEvent += Pannel_SaveEvent;
-            pannel.ReloadEvent += Pannel_ReloadEvent;
+            Pannel = pannelObject.GetComponent<EasyUGUIPannel>();
+            Pannel.Title = Id;
+            Pannel.SaveEvent += Pannel_SaveEvent;
+            Pannel.ReloadEvent += Pannel_ReloadEvent;
+
             foreach (var field in fields)
             {
                 var type = field.FieldType;
@@ -66,7 +74,7 @@ namespace EasyUGUI
                     component.Id = field.Name;
                     component.Init(list, field.FieldType);
                     pairList.Add(new FieldControlPair(field, component));
-                    pannel.AddControl(go);
+                    Pannel.AddControl(go);
                 }
                 else if (type.Name == typeof(float).Name)
                 {
@@ -78,7 +86,7 @@ namespace EasyUGUI
                         component.MaxValue = rangeAttribute.max;
                         component.Id = field.Name;
                         pairList.Add(new FieldControlPair(field, component));
-                        pannel.AddControl(go);
+                        Pannel.AddControl(go);
                     }
                     else
                     {
@@ -86,7 +94,7 @@ namespace EasyUGUI
                         var component = go.GetComponent<EasyUGUIFloatInputField>();
                         component.Id = field.Name;
                         pairList.Add(new FieldControlPair(field, component));
-                        pannel.AddControl(go);
+                        Pannel.AddControl(go);
                     }
                 }
                 else if (type.Name == typeof(int).Name)
@@ -99,7 +107,7 @@ namespace EasyUGUI
                         component.MinValue = (int)rangeAttribute.min;
                         component.MaxValue = (int)rangeAttribute.max;
                         pairList.Add(new FieldControlPair(field, component));
-                        pannel.AddControl(go);
+                        Pannel.AddControl(go);
                     }
                     else
                     {
@@ -107,7 +115,7 @@ namespace EasyUGUI
                         var component = go.GetComponent<EasyUGUIIntInputField>();
                         component.Id = field.Name;
                         pairList.Add(new FieldControlPair(field, component));
-                        pannel.AddControl(go);
+                        Pannel.AddControl(go);
                     }
                 }
                 else if (type.Name == typeof(string).Name)
@@ -119,7 +127,7 @@ namespace EasyUGUI
                         var component = go.GetComponent<EasyUGUITextInputField>();
                         component.Id = field.Name;
                         pairList.Add(new FieldControlPair(field, component));
-                        pannel.AddControl(go);
+                        Pannel.AddControl(go);
                     }
                     else
                     {
@@ -127,7 +135,7 @@ namespace EasyUGUI
                         var component = go.GetComponent<EasyUGUITextInputField>();
                         component.Id = field.Name;
                         pairList.Add(new FieldControlPair(field, component));
-                        pannel.AddControl(go);
+                        Pannel.AddControl(go);
                     }
                 }
                 else if (type.Name == typeof(bool).Name)
@@ -136,7 +144,7 @@ namespace EasyUGUI
                     var component = go.GetComponent<EasyUGUIToggle>();
                     component.Id = field.Name;
                     pairList.Add(new FieldControlPair(field, component));
-                    pannel.AddControl(go);
+                    Pannel.AddControl(go);
                 }
             }
 
@@ -161,7 +169,7 @@ namespace EasyUGUI
             var field = pairList.FirstOrDefault(e => e.fieldInfo.Name == control.Id).fieldInfo;
             if (field == null) return;
             field.SetValue(setting, value);
-            setting.OnUpdate();
+            setting.OnUpdated();
         }
 
         public void Restore()
@@ -186,6 +194,7 @@ namespace EasyUGUI
                     pair.easyUGUIControl.SetValue(value);
                 }
             }
+            setting.OnReloaded();
         }
         
         public void Save()
@@ -202,6 +211,7 @@ namespace EasyUGUI
                 list.Add(info);
             }
             IOHandler.SaveJson(IOHandler.IntoStreamingAssets(fileName), list);
+            setting.OnSaved();
         }
 
         public class FieldControlPair
